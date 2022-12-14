@@ -31,10 +31,10 @@ class H2GCN(nn.Layer):
     def forward(
             self,
             x: paddle.Tensor,
-            adj: paddle.sparse.sparse_csr_tensor,
-            adj_2hop: paddle.sparse.sparse_csr_tensor
+            adj: paddle.Tensor,
+            adj_2hop: paddle.Tensor
     ) -> paddle.Tensor:
-        x = self.embed(x)
+        x = self.embed_layer(x)
 
         hidden_reps = [x]
         for _ in range(self.round):
@@ -45,4 +45,4 @@ class H2GCN(nn.Layer):
 
         hf = self.dropout(paddle.concat(hidden_reps, axis=-1))
 
-        return F.log_softmax(self.classification(hf), axis=1)
+        return F.log_softmax(self.classifier(hf), axis=1)
